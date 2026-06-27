@@ -1,8 +1,8 @@
 <!DOCTYPE html>
+
 <html lang="ja">
-<head><link rel="icon" href="favicon.ico">
-<link rel="apple-touch-icon" href="icon-512.png">
-<meta charset="UTF-8">
+<head>
+<meta charset="utf-8"/>
 <title>医療費・セルフメディケーション管理</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -94,78 +94,79 @@
 
   .empty { color: #aaa; text-align: center; padding: 30px; }
 </style>
-</head>
+
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="#2d6abf" name="theme-color"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="医療費管理" name="apple-mobile-web-app-title"/>
+<link href="manifest.json" rel="manifest"/>
+<link href="favicon.ico" rel="icon"/>
+<link href="apple-touch-icon.png" rel="apple-touch-icon"/></head>
 <body>
-
 <header>医療費・セルフメディケーション税制　管理アプリ</header>
-
 <div class="container">
-
-  <!-- 入力フォーム -->
-  <div class="card">
-    <h2>新しい記録を追加</h2>
-    <div class="form-row">
-      <div class="form-group">
-        <label>日付</label>
-        <input type="date" id="inp-date">
-      </div>
-      <div class="form-group" style="flex:1; min-width:160px;">
-        <label>名称（病院名・薬名など）</label>
-        <input type="text" id="inp-name" placeholder="例：〇〇病院、△△薬">
-      </div>
-      <div class="form-group">
-        <label>金額（円）</label>
-        <input type="number" id="inp-amount" placeholder="例：1500" style="width:120px;">
-      </div>
-      <div class="form-group" style="min-width:200px;">
-        <label>種類</label>
-        <select id="inp-type">
-          <option>診療・治療費</option>
-          <option>市販薬（セルフメディケーション対象）</option>
-          <option>処方薬</option>
-        </select>
-      </div>
-      <button class="btn-add" onclick="addRecord()">＋ 追加</button>
-    </div>
-  </div>
-
-  <!-- 一覧 -->
-  <div class="card">
-    <h2>記録一覧</h2>
-    <div class="year-row">
-      <label>表示する年：</label>
-      <select id="year-select" onchange="renderTable()"></select>
-    </div>
-    <div style="overflow-x:auto; margin-top:10px;">
-      <table>
-        <thead>
-          <tr>
-            <th>日付</th>
-            <th>名称</th>
-            <th style="text-align:right;">金額（円）</th>
-            <th>種類</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="table-body">
-          <tr><td colspan="5" class="empty">記録がありません</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- 集計・判定 -->
-  <div class="card">
-    <h2>集計と判定</h2>
-    <div class="summary-totals" id="summary-totals">－</div>
-    <div id="result-box" class="result-box none">
-      <div class="result-title" id="result-title">記録を追加すると判定が表示されます</div>
-      <div class="result-note" id="result-note"></div>
-    </div>
-  </div>
-
+<!-- 入力フォーム -->
+<div class="card">
+<h2>新しい記録を追加</h2>
+<div class="form-row">
+<div class="form-group">
+<label>日付</label>
+<input id="inp-date" type="date"/>
 </div>
-
+<div class="form-group" style="flex:1; min-width:160px;">
+<label>名称（病院名・薬名など）</label>
+<input id="inp-name" placeholder="例：〇〇病院、△△薬" type="text"/>
+</div>
+<div class="form-group">
+<label>金額（円）</label>
+<input id="inp-amount" placeholder="例：1500" style="width:120px;" type="number"/>
+</div>
+<div class="form-group" style="min-width:200px;">
+<label>種類</label>
+<select id="inp-type">
+<option>診療・治療費</option>
+<option>市販薬（セルフメディケーション対象）</option>
+<option>処方薬</option>
+</select>
+</div>
+<button class="btn-add" onclick="addRecord()">＋ 追加</button>
+</div>
+</div>
+<!-- 一覧 -->
+<div class="card">
+<h2>記録一覧</h2>
+<div class="year-row">
+<label>表示する年：</label>
+<select id="year-select" onchange="renderTable()"></select>
+</div>
+<div style="overflow-x:auto; margin-top:10px;">
+<table>
+<thead>
+<tr>
+<th>日付</th>
+<th>名称</th>
+<th style="text-align:right;">金額（円）</th>
+<th>種類</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="table-body">
+<tr><td class="empty" colspan="5">記録がありません</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 集計・判定 -->
+<div class="card">
+<h2>集計と判定</h2>
+<div class="summary-totals" id="summary-totals">－</div>
+<div class="result-box none" id="result-box">
+<div class="result-title" id="result-title">記録を追加すると判定が表示されます</div>
+<div class="result-note" id="result-note"></div>
+</div>
+</div>
+</div>
 <script>
 // データをlocalStorageに保存
 const STORAGE_KEY = "iryohi_records";
@@ -324,5 +325,11 @@ cleanBadRecords();
 updateYearSelect();
 renderTable();
 </script>
-</body>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js');
+  });
+}
+</script></body>
 </html>
